@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app_flutter/widgets/todo_list.dart';
 
 class TodosScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: Colors.lightBlueAccent,
+        child: const Icon(Icons.add),
+      ),
       backgroundColor: Colors.lightBlueAccent,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,11 +48,13 @@ class TodosScreen extends StatelessWidget {
           ),
           Expanded(
             child: Container(
+              padding: const EdgeInsets.only(top: 30, left: 30, right: 30),
               decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30))),
+              child: TodoList(),
             ),
           )
         ],
