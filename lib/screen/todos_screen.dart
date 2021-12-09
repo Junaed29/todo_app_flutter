@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app_flutter/model/task.dart';
 import 'package:todo_app_flutter/widgets/todo_list.dart';
 
 import 'add_task_screen.dart';
 
-class TodosScreen extends StatelessWidget {
+class TodosScreen extends StatefulWidget {
+  @override
+  State<TodosScreen> createState() => _TodosScreenState();
+}
+
+class _TodosScreenState extends State<TodosScreen> {
+  List<Task> taskList = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +25,13 @@ class TodosScreen extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: AddTaskScreen(),
+                child: AddTaskScreen(taskCreatedCallback: (taskName) {
+                  Navigator.of(context).pop(); // To Close the ModalBottomSheet
+
+                  setState(() {
+                    taskList.add(Task(taskName: taskName, isDone: false));
+                  });
+                }),
               ),
             ),
           );
@@ -34,8 +48,8 @@ class TodosScreen extends StatelessWidget {
                 const EdgeInsets.only(top: 70, left: 30, right: 30, bottom: 30),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                CircleAvatar(
+              children: [
+                const CircleAvatar(
                   radius: 30,
                   child: Icon(
                     Icons.list,
@@ -44,10 +58,10 @@ class TodosScreen extends StatelessWidget {
                   ),
                   backgroundColor: Colors.white,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Text(
+                const Text(
                   "Todoey",
                   style: TextStyle(
                       color: Colors.white,
@@ -55,8 +69,8 @@ class TodosScreen extends StatelessWidget {
                       fontWeight: FontWeight.w900),
                 ),
                 Text(
-                  "12 Tasks",
-                  style: TextStyle(color: Colors.white, fontSize: 18),
+                  "${taskList.length} Tasks",
+                  style: const TextStyle(color: Colors.white, fontSize: 18),
                 ),
               ],
             ),
@@ -69,7 +83,14 @@ class TodosScreen extends StatelessWidget {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30))),
-              child: TodoList(),
+              child: TodoList(
+                taskList: taskList,
+                taskIndex: (index) {
+                  setState(() {
+                    taskList[index].toggleIsDone();
+                  });
+                },
+              ),
             ),
           )
         ],

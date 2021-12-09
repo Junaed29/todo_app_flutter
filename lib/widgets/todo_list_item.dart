@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class TodoListItem extends StatelessWidget {
-  String taskName = "";
-  bool isChacked = false;
-  Function(bool?)? taskDoneCallback;
+  final String taskName;
+  final bool isChacked;
+  final Function(bool?)? taskDoneCallback;
 
   TodoListItem(
       {required this.taskName,
