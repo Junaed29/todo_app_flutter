@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app_flutter/model/task.dart';
 import 'package:todo_app_flutter/widgets/todo_list.dart';
 
@@ -11,6 +12,24 @@ class TodosScreen extends StatefulWidget {
 
 class _TodosScreenState extends State<TodosScreen> {
   List<Task> taskList = [];
+  late final SharedPreferences prefs;
+
+  @override
+  void initState() {
+    asyncMethod();
+    super.initState();
+  }
+
+  //To initialize the SharedPreferences
+  void asyncMethod() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
+  @override
+  void dispose() {
+    print("dispose");
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
