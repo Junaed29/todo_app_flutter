@@ -1,38 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:todo_app_flutter/model/task.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app_flutter/provider/task_data.dart';
 import 'package:todo_app_flutter/widgets/todo_list.dart';
 
 import 'add_task_screen.dart';
 
-class TodosScreen extends StatefulWidget {
-  @override
-  State<TodosScreen> createState() => _TodosScreenState();
-}
-
-class _TodosScreenState extends State<TodosScreen> {
-  List<Task> taskList = [];
-  late final SharedPreferences prefs;
-
-  @override
-  void initState() {
-    asyncMethod();
-    super.initState();
-  }
-
-  //To initialize the SharedPreferences
-  void asyncMethod() async {
-    prefs = await SharedPreferences.getInstance();
-  }
-
-  @override
-  void dispose() {
-    print("dispose");
-    super.dispose();
-  }
-
+class TodosScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print("Widget build");
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -44,13 +20,7 @@ class _TodosScreenState extends State<TodosScreen> {
               child: Container(
                 padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: AddTaskScreen(taskCreatedCallback: (taskName) {
-                  Navigator.of(context).pop(); // To Close the ModalBottomSheet
-
-                  setState(() {
-                    taskList.add(Task(taskName: taskName, isDone: false));
-                  });
-                }),
+                child: AddTaskScreen(),
               ),
             ),
           );
@@ -87,9 +57,13 @@ class _TodosScreenState extends State<TodosScreen> {
                       fontSize: 50,
                       fontWeight: FontWeight.w900),
                 ),
-                Text(
-                  "${taskList.length} Tasks",
-                  style: const TextStyle(color: Colors.white, fontSize: 18),
+                Consumer<TaskData>(
+                  builder: (context, taskData, _) {
+                    return Text(
+                      "${taskData.taskCount} Tasks",
+                      style: const TextStyle(color: Colors.white, fontSize: 18),
+                    );
+                  },
                 ),
               ],
             ),
@@ -102,14 +76,7 @@ class _TodosScreenState extends State<TodosScreen> {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30))),
-              child: TodoList(
-                taskList: taskList,
-                taskIndex: (index) {
-                  setState(() {
-                    taskList[index].toggleIsDone();
-                  });
-                },
-              ),
+              child: TodoList(),
             ),
           )
         ],

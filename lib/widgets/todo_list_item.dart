@@ -4,15 +4,18 @@ class TodoListItem extends StatelessWidget {
   final String taskName;
   final bool isChacked;
   final Function(bool?)? taskDoneCallback;
+  void Function()? onLongPress;
 
   TodoListItem(
       {required this.taskName,
       required this.isChacked,
-      required this.taskDoneCallback});
+      required this.taskDoneCallback,
+      required this.onLongPress});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onLongPress: onLongPress,
       leading: Text(
         taskName,
         style: TextStyle(
